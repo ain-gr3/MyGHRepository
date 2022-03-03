@@ -13,6 +13,7 @@
 		355B1D9027D1013E0033217B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 355B1D8E27D1013E0033217B /* Main.storyboard */; };
 		355B1D9227D1013F0033217B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 355B1D9127D1013F0033217B /* Assets.xcassets */; };
 		355B1D9527D1013F0033217B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 355B1D9327D1013F0033217B /* LaunchScreen.storyboard */; };
+		355B1D9E27D1042F0033217B /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 355B1D9D27D1042F0033217B /* App */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				355B1D9E27D1042F0033217B /* App in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +44,7 @@
 			children = (
 				355B1D8727D1013E0033217B /* Development */,
 				355B1D8627D1013E0033217B /* Products */,
+				355B1D9C27D1042F0033217B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +70,13 @@
 			path = Development;
 			sourceTree = "<group>";
 		};
+		355B1D9C27D1042F0033217B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -83,6 +93,9 @@
 			dependencies = (
 			);
 			name = Development;
+			packageProductDependencies = (
+				355B1D9D27D1042F0033217B /* App */,
+			);
 			productName = Development;
 			productReference = 355B1D8527D1013E0033217B /* Development.app */;
 			productType = "com.apple.product-type.application";
@@ -360,6 +373,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		355B1D9D27D1042F0033217B /* App */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = App;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 355B1D7D27D1013E0033217B /* Project object */;
 }
