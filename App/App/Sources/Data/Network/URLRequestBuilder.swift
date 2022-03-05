@@ -20,7 +20,7 @@ struct URLRequestBuilder {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = appRequest.method.rawValue
         urlRequest.httpBody = appRequest.body
-        urlRequest.allHTTPHeaderFields = appRequest.header
+        urlRequest.allHTTPHeaderFields = appRequest.header.convertToDictionary()
 
         return urlRequest
     }
