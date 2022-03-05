@@ -18,7 +18,7 @@ struct AppAPIRequest<Decoder: DataDecoder> {
     let method: HTTPMethod
     let queries: [URLQueryItem]
     let body: Data?
-    let header: [String: String]
+    let header: [AppHTTPHeader]
 
     let decoder: Decoder
 
