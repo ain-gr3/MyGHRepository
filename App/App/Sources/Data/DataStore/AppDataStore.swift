@@ -17,7 +17,7 @@ struct AppDataStore<Converter: DataConverter> {
             return .failure(.noSuchFile)
         }
         do {
-            let object = try decode(data)
+            let object = try dataConverter.decode(data)
             return .success(object)
         } catch {
             return .failure(.invalidDataStructure)
@@ -26,7 +26,7 @@ struct AppDataStore<Converter: DataConverter> {
 
     func createFile(at directory: AppDirectory, _ fileName: String, of object: Converter.Object) -> Result<Void, DataStoreError> {
         do {
-            let data = try encode(object)
+            let data = try dataConverter.encode(object)
             fileManager.createFile(atPath: directory.path + fileName, contents: data)
             return .success(())
         } catch {
