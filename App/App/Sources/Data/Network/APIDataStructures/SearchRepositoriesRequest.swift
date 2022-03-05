@@ -13,7 +13,7 @@ struct SearchRepositoriesDecoder: DataDecoder {
 
 extension AppAPIRequest where Decoder == SearchRepositoriesDecoder {
 
-    static func searchRepositories(searchWord: String) -> Self {
+    static func searchRepositoriesRequest(searchWord: String) -> Self {
         .init(
             baseURLString: "https://api.github.com/search/repositories",
             method: .GET,
