@@ -21,6 +21,8 @@ protocol AppAPIRequest {
     var queries: [URLQueryItem] { get set }
     var body: Data? { get set }
     var header: [String: String] { get set }
+
+    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Response, NetworkError>
 }
 
 extension AppAPIRequest {

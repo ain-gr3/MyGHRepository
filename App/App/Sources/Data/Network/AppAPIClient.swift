@@ -15,7 +15,7 @@ struct AppAPIClient {
     func send<Request: AppAPIRequest>(
         _ appRequest: Request,
         handlar: @escaping (Result<Request.Response, NetworkError>) -> Void
-    ) -> URLSessionTask? where Request.Response: Decodable {
+    ) -> URLSessionTask? {
         guard let urlRequest = builder.build(appRequest) else {
             handlar(.failure(.invalideRequest))
             return nil
