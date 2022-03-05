@@ -24,7 +24,7 @@ struct AppDataStore<Converter: DataConverter> {
         }
     }
 
-    func createFile(at directory: AppDirectory, _ fileName: String, of object: Converter.Object) -> Result<Void, DataStoreError> {
+    func create(_ fileName: String, at directory: AppDirectory, object: Converter.Object) -> Result<Void, DataStoreError> {
         do {
             let data = try dataConverter.encode(object)
             fileManager.createFile(atPath: directory.path + fileName, contents: data)
