@@ -1,5 +1,5 @@
 //
-//  APIClient.swift
+//  AppAPIClient.swift
 //  
 //
 //  Created by Ain Obara on 2022/03/04.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct APIClient {
+struct AppAPIClient {
 
     private let builder = URLRequestBuilder()
 
