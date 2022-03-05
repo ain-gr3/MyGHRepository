@@ -12,7 +12,7 @@ enum HTTPMethod: String {
     case GET
 }
 
-struct AppAPIRequest<Converter: DataConverter> {
+struct AppAPIRequest<Decoder: DataDecoder> {
 
     let baseURLString: String
     let method: HTTPMethod
@@ -20,13 +20,13 @@ struct AppAPIRequest<Converter: DataConverter> {
     let body: Data?
     let header: [String: String]
 
-    let dataConverter: Converter
+    let decoder: Decoder
 
-    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Converter.Object, NetworkError> {
+    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Decoder.Object, NetworkError> {
         do {
             switch response.statusCode {
             case 200...299:
-                let object = try dataConverter.decode(data)
+                let object = try decoder.decode(data)
                 return .success(object)
             case 400...499:
                 return .failure(NetworkError.serverError)

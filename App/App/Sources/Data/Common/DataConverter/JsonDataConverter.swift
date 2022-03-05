@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension DataConverter where Object: Decodable {
+extension DataDecoder where Object: Decodable {
 
     func decode(_ data: Data) throws -> Object {
         let decoder = JSONDecoder.default
@@ -16,7 +16,7 @@ extension DataConverter where Object: Decodable {
     }
 }
 
-extension DataConverter where Object: Encodable {
+extension DataEncoder where Object: Encodable {
 
     func encode(_ object: Object) throws -> Data {
         let encoder = JSONEncoder.default
