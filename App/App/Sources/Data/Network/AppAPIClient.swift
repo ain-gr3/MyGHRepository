@@ -12,9 +12,9 @@ struct AppAPIClient {
     private let builder = URLRequestBuilder()
 
     @discardableResult
-    func send<Request: AppAPIRequest>(
-        _ appRequest: Request,
-        handlar: @escaping (Result<Request.Response, NetworkError>) -> Void
+    func send<Converter: DataConverter>(
+        _ appRequest: AppAPIRequest<Converter>,
+        handlar: @escaping (Result<Converter.Object, NetworkError>) -> Void
     ) -> URLSessionTask? {
         guard let urlRequest = builder.build(appRequest) else {
             handlar(.failure(.invalideRequest))
