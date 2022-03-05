@@ -37,3 +37,22 @@ extension AppRequest {
         [:]
     }
 }
+
+extension AppRequest where Response: Decodable {
+
+    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Response, NetworkError> {
+        do {
+            switch response.statusCode {
+            case 200...299:
+                let object = try JSONDecoder.default.decode(Response.self, from: data)
+                return .success(object)
+            case 400...499:
+                return .failure(NetworkError.serverError)
+            default:
+                return .failure(NetworkError.unknown)
+            }
+        } catch {
+            return .failure(NetworkError.invalideResponse)
+        }
+    }
+}
