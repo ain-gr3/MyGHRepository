@@ -12,7 +12,7 @@ struct APIClient {
     private let builder = URLRequestBuilder()
 
     @discardableResult
-    func send<Request: AppRequest>(
+    func send<Request: AppAPIRequest>(
         _ appRequest: Request,
         handlar: @escaping (Result<Request.Response, NetworkError>) -> Void
     ) -> URLSessionTask? where Request.Response: Decodable {

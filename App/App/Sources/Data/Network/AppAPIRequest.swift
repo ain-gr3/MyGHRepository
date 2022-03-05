@@ -1,5 +1,5 @@
 //
-//  HTTPRequest.swift
+//  AppAPIRequest.swift
 //  
 //
 //  Created by Ain Obara on 2022/03/04.
@@ -12,7 +12,7 @@ enum HTTPMethod: String {
     case GET
 }
 
-protocol AppRequest {
+protocol AppAPIRequest {
 
     associatedtype Response
 
@@ -23,7 +23,7 @@ protocol AppRequest {
     var header: [String: String] { get set }
 }
 
-extension AppRequest {
+extension AppAPIRequest {
 
     var method: HTTPMethod {
         .GET
@@ -38,7 +38,7 @@ extension AppRequest {
     }
 }
 
-extension AppRequest where Response: Decodable {
+extension AppAPIRequest where Response: Decodable {
 
     func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Response, NetworkError> {
         do {
