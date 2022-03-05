@@ -7,10 +7,18 @@
 
 import Foundation
 
-protocol DataConverter {
+protocol DataConverter: DataDecoder, DataEncoder {}
+
+protocol DataDecoder {
 
     associatedtype Object
 
     func decode(_ data: Data) throws -> Object
+}
+
+protocol DataEncoder {
+
+    associatedtype Object
+
     func encode(_ object: Object) throws -> Data
 }

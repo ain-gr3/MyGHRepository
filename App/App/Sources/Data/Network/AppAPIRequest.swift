@@ -12,41 +12,21 @@ enum HTTPMethod: String {
     case GET
 }
 
-protocol AppAPIRequest {
+struct AppAPIRequest<Decoder: DataDecoder> {
 
-    associatedtype Response
+    let baseURLString: String
+    let method: HTTPMethod
+    let queries: [URLQueryItem]
+    let body: Data?
+    let header: [String: String]
 
-    var baseURLString: String { get set }
-    var method: HTTPMethod { get set }
-    var queries: [URLQueryItem] { get set }
-    var body: Data? { get set }
-    var header: [String: String] { get set }
+    let decoder: Decoder
 
-    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Response, NetworkError>
-}
-
-extension AppAPIRequest {
-
-    var method: HTTPMethod {
-        .GET
-    }
-
-    var body: Data? {
-        nil
-    }
-
-    var header: [String: String] {
-        [:]
-    }
-}
-
-extension AppAPIRequest where Response: Decodable {
-
-    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Response, NetworkError> {
+    func parse(_ data: Data, _ response: HTTPURLResponse) -> Result<Decoder.Object, NetworkError> {
         do {
             switch response.statusCode {
             case 200...299:
-                let object = try JSONDecoder.default.decode(Response.self, from: data)
+                let object = try decoder.decode(data)
                 return .success(object)
             case 400...499:
                 return .failure(NetworkError.serverError)

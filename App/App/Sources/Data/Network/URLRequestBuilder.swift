@@ -9,7 +9,7 @@ import Foundation
 
 struct URLRequestBuilder {
 
-    func build<Request: AppAPIRequest>(_ appRequest: Request) -> URLRequest? {
+    func build<Decoder: DataDecoder>(_ appRequest: AppAPIRequest<Decoder>) -> URLRequest? {
         var components = URLComponents(string: appRequest.baseURLString)
         components?.queryItems = appRequest.queries
 
