@@ -31,7 +31,7 @@ private extension MainTab {
     func viewController() -> UIViewController {
         switch self {
         case .search:
-            return SearchViewController()
+            return SearchViewController(viewModel: SearchViewModel())
         case .favorite:
             return RepositoryListViewController()
         }
