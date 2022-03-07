@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 final class RepositoryCell: UICollectionViewCell {
 
@@ -22,6 +23,8 @@ final class RepositoryCell: UICollectionViewCell {
         numberFormatter.groupingSize = 3
         return numberFormatter
     }()
+
+    private var disposable: Disposable?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -108,6 +111,15 @@ final class RepositoryCell: UICollectionViewCell {
         newAttributes.size = newsize
         return newAttributes
     }
+
+    func bind(_ repository: RepositoryCellData) {
+        titleLabel.text = repository.title
+        subTitleLabel.text = repository.subtitle
+        starCountLabel.text = numberFormatter.string(from: NSNumber(value: repository.starCount)) ?? "?"
+
+        disposable = repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
+    }
+}
 
 private extension UIImageView {
 
