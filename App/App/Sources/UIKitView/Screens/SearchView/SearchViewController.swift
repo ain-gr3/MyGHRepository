@@ -18,6 +18,7 @@ final class SearchViewController: UIViewController {
         textField.placeholder = "キーワードを入力"
         textField.textAlignment = .center
         textField.delegate = self
+        textField.font = .preferredFont(forTextStyle: .body)
 
         var buttonConfigration = UIButton.Configuration.borderedProminent()
         buttonConfigration.buttonSize = .large
