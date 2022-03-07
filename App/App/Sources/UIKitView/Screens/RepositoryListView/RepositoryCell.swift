@@ -9,7 +9,7 @@ import UIKit
 
 final class RepositoryCell: UICollectionViewCell {
 
-    private let repositoryImageView = UIImageView(image: UIImage(systemName: "person.circle"))
+    private let repositoryImageView = UIImageView(image: .defaultRepositoryImage)
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let starCountLabel = UILabel()
