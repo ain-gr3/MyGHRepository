@@ -40,7 +40,6 @@ final class RepositoryCell: UICollectionViewCell {
         titleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         titleLabel.font = .preferredFont(forTextStyle: .title3)
         subTitleLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        subTitleLabel.font = .preferredFont(forTextStyle: .caption1)
         subTitleLabel.textColor = .secondaryLabel
         titlesStackView.spacing = 4
         titlesStackView.axis = .vertical
