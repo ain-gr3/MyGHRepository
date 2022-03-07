@@ -101,7 +101,7 @@ final class RepositoryCell: UICollectionViewCell {
         return newAttributes
     }
 
-extension UIImageView {
+private extension UIImageView {
 
     func downlodeImage(from url: URL) -> Single<Void> {
         Single.create { obsever in
