@@ -10,7 +10,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "App",
-            targets: ["UI", "Data", "Domain"]),
+            targets: ["UIKitView", "Data", "Domain"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -26,7 +26,7 @@ let package = Package(
             name: "Data",
             dependencies: []),
         .target(
-            name: "UI",
+            name: "UIKitView",
             dependencies: []),
         .testTarget(
             name: "DomainTests",
