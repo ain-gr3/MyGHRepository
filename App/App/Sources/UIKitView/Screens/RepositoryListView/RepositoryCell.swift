@@ -138,9 +138,7 @@ private extension UIImageView {
                 self.image = .defaultRepositoryImage
             }
             obsever(.success(()))
-            return Disposables.create {
-                self.image = .defaultRepositoryImage
-            }
+            return Disposables.create {}
         }
     }
 }
