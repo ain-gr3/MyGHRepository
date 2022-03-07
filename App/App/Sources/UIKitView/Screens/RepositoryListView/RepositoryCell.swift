@@ -103,6 +103,12 @@ final class RepositoryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        disposable?.dispose()
+    }
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let newHeight = contentView.systemLayoutSizeFitting(layoutAttributes.size).height
         let newsize = CGSize(width: layoutAttributes.size.width, height: newHeight)
