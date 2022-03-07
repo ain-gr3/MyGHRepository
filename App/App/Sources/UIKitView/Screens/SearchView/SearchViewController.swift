@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController {
 
         let button = UIButton(configuration: buttonConfigration, primaryAction: .init { [weak self] _ in
             textField.resignFirstResponder()
-            // TODO: validate text and transition
+            self?.navigationController?.pushViewController(RepositoryListViewController(), animated: true)
             print(self?.viewModel.text.value ?? "nil")
         })
         viewModel.isButtonEnabled.bind(to: button.rx.isEnabled)
