@@ -25,7 +25,6 @@ final class SearchViewController: UIViewController {
         buttonConfigration.attributedTitle = AttributedString("検索")
         buttonConfigration.attributedTitle?.font = .preferredFont(forTextStyle: .headline)
 
-
         let button = UIButton(configuration: buttonConfigration, primaryAction: .init { _ in
             textField.resignFirstResponder()
             // TODO: validate text and transition
@@ -34,7 +33,7 @@ final class SearchViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [textField, button])
         stackView.alignment = .fill
         stackView.axis = .vertical
-        stackView.spacing = 40
+        stackView.spacing = 48
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stackView)
