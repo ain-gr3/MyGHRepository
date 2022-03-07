@@ -25,8 +25,4 @@ final class SearchViewModel {
     func onChange(text: String?) {
         self.text.accept(text)
     }
-
-    func bind() {
-
-    }
 }
