@@ -44,7 +44,9 @@ extension RepositoryListViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: RepositoryCell.self), for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: RepositoryCell.self), for: indexPath) as! RepositoryCell
+        cell.bind(.sample)
+        return cell
     }
 }
 
