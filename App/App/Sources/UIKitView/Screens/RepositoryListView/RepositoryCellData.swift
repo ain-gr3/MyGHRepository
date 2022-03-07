@@ -13,4 +13,5 @@ struct RepositoryCellData {
     let subtitle: String
     let imageURL: URL
     let starCount: Int
+    let isLastContent: Bool
 }

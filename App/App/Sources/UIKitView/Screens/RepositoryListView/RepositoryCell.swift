@@ -125,6 +125,8 @@ final class RepositoryCell: UICollectionViewCell {
         starCountLabel.text = numberFormatter.string(from: NSNumber(value: repository.starCount)) ?? "?"
 
         disposable = repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
+
+        separator.isHidden = repository.isLastContent
     }
 }
 
