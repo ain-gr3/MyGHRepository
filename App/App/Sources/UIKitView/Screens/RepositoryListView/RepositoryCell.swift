@@ -107,6 +107,7 @@ final class RepositoryCell: UICollectionViewCell {
         super.prepareForReuse()
 
         disposable?.dispose()
+        repositoryImageView.image = .defaultRepositoryImage
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
