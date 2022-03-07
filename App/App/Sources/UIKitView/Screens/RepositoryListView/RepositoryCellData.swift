@@ -15,3 +15,16 @@ struct RepositoryCellData {
     let starCount: Int
     let isLastContent: Bool
 }
+
+extension RepositoryCellData {
+
+    static var sample: Self {
+        self.init(
+            title: "apple/Swift",
+            subtitle: "Swift",
+            imageURL: URL(string: "https://avatars.githubusercontent.com/u/10639145?v=4")!,
+            starCount: 100000,
+            isLastContent: false
+        )
+    }
+}
