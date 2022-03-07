@@ -118,3 +118,8 @@ private extension UIImageView {
         }
     }
 }
+
+private extension UIImage {
+
+    static let defaultRepositoryImage = UIImage(systemName: "person.circle")
+}
