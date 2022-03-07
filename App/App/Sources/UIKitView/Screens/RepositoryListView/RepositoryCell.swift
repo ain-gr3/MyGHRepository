@@ -161,11 +161,11 @@ private extension UIImage {
 
 private extension NumberFormatter {
 
-    static var comma: Self {
-        let formatter = self.init()
+    static let comma: NumberFormatter = {
+        let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.decimalSeparator = ","
         formatter.groupingSize = 3
         return formatter
-    }
+    }()
 }
