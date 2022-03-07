@@ -41,10 +41,13 @@ final class SearchViewController: UIViewController {
         buttonConfigration.attributedTitle = AttributedString("検索")
         buttonConfigration.attributedTitle?.font = .preferredFont(forTextStyle: .headline)
 
-        let button = UIButton(configuration: buttonConfigration, primaryAction: .init { _ in
+        let button = UIButton(configuration: buttonConfigration, primaryAction: .init { [weak self] _ in
             textField.resignFirstResponder()
             // TODO: validate text and transition
+            print(self?.viewModel.text.value ?? "nil")
         })
+        viewModel.isButtonEnabled.bind(to: button.rx.isEnabled)
+            .disposed(by: disposeBag)
 
         let stackView = UIStackView(arrangedSubviews: [textField, button])
         stackView.alignment = .fill
