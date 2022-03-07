@@ -15,6 +15,14 @@ final class RepositoryCell: UICollectionViewCell {
     private let starCountLabel = UILabel()
     private let separator = UIView()
 
+    private lazy var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.decimalSeparator = ","
+        numberFormatter.groupingSize = 3
+        return numberFormatter
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
