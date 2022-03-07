@@ -100,4 +100,21 @@ final class RepositoryCell: UICollectionViewCell {
         newAttributes.size = newsize
         return newAttributes
     }
+
+extension UIImageView {
+
+    func downlodeImage(from url: URL) -> Single<Void> {
+        Single.create { obsever in
+            do {
+                let data = try Data(contentsOf: url)
+                self.image = UIImage(data: data) ?? .defaultRepositoryImage
+            } catch {
+                self.image = .defaultRepositoryImage
+            }
+            obsever(.success(()))
+            return Disposables.create {
+                self.image = .defaultRepositoryImage
+            }
+        }
+    }
 }
