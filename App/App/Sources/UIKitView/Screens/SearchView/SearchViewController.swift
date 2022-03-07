@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import RxCocoa
+import RxSwift
 
 final class SearchViewController: UIViewController {
 
     private let viewModel: SearchViewModel
+    private let disposeBag = DisposeBag()
 
     init(viewModel: SearchViewModel) {
         self.viewModel = viewModel
@@ -30,6 +33,8 @@ final class SearchViewController: UIViewController {
         textField.textAlignment = .center
         textField.delegate = self
         textField.font = .preferredFont(forTextStyle: .body)
+        textField.rx.text.bind(to: viewModel.text)
+            .disposed(by: disposeBag)
 
         var buttonConfigration = UIButton.Configuration.borderedProminent()
         buttonConfigration.buttonSize = .large
