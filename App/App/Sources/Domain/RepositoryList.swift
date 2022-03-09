@@ -9,7 +9,7 @@ import Foundation
 
 public struct RepositoryList {
 
-    private let repository: LocalRepositoryRepository
+    private let repository: RepositoryRepository
 
     public func remoteRepositories(relatedTo keyword: String) {
         switch repository.fetchRemoteRepository(relatedTo: keyword) {
