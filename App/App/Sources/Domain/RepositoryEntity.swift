@@ -40,3 +40,10 @@ public class RepositoryEntity: Identifiable {
         )
     }
 }
+
+extension RepositoryEntity: Equatable {
+
+    public static func == (lhs: RepositoryEntity, rhs: RepositoryEntity) -> Bool {
+        lhs.id == rhs.id
+    }
+}
