@@ -12,25 +12,27 @@ public struct RepositoryList {
     private let repository: RepositoryRepository
 
     public func remoteRepositories(relatedTo keyword: String) {
-        switch repository.fetchRemoteRepository(relatedTo: keyword) {
-        case .success(let remoteRepositoriesData):
-            switch repository.fetchLocalRepository() {
-            case .success(let localRepositoriesData):
-                let repositoryEntities = remoteRepositoriesData.map { remoteRepositoryData -> RepositoryEntity in
-                    if localRepositoriesData.contains(remoteRepositoryData) {
-                        return RepositoryEntity(data: remoteRepositoryData, isLiked: true)
-                    } else {
-                        return RepositoryEntity(data: remoteRepositoryData, isLiked: false)
+        repository.fetchRemoteRepository(relatedTo: keyword) { result in
+            switch result {
+            case .success(let remoteRepositoriesData):
+                switch repository.fetchLocalRepository() {
+                case .success(let localRepositoriesData):
+                    let repositoryEntities = remoteRepositoriesData.map { remoteRepositoryData -> RepositoryEntity in
+                        if localRepositoriesData.contains(remoteRepositoryData) {
+                            return RepositoryEntity(data: remoteRepositoryData, isLiked: true)
+                        } else {
+                            return RepositoryEntity(data: remoteRepositoryData, isLiked: false)
+                        }
                     }
+                    // TODO: publish event
+                case .failure(let error):
+                    // TODO: publish event
+                    break
                 }
-                // TODO: publish event
             case .failure(let error):
                 // TODO: publish event
                 break
             }
-        case .failure(let error):
-            // TODO: publish event
-            break
         }
     }
 
