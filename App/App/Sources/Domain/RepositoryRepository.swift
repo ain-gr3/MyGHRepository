@@ -9,8 +9,8 @@ import Foundation
 
 public protocol RepositoryRepository {
 
-    func fetchRemoteRepository(relatedTo keyword: String, completion: (Result<[RepositoryData], Error>) -> Void)
     func fetchLocalRepository() -> Result<[RepositoryData], Error>
+    func fetchRemoteRepository(relatedTo keyword: String, completion: @escaping (Result<[RepositoryData], Error>) -> Void)
     func save(_ repository: RepositoryData) -> Result<Void, Error>
     func remove(_ repository: RepositoryData) -> Result<Void, Error>
 }
