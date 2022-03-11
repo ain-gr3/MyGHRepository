@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct AppDataStore<Converter: DataConverter> {
+struct AppFileManager<Converter: DataConverter> {
 
     private let fileManager: FileManager
     private let dataConverter: Converter
 
-    func getContents(at directory: AppDirectory, fileName: String) -> Result<Converter.Object, DataStoreError> {
+    func getContents(at directory: AppDirectory, fileName: String) -> Result<Converter.Object, FileManagerError> {
         guard let data = fileManager.contents(atPath: directory.path + fileName) else {
             return .failure(.noSuchFile)
         }
@@ -24,7 +24,7 @@ struct AppDataStore<Converter: DataConverter> {
         }
     }
 
-    func create(_ fileName: String, at directory: AppDirectory, object: Converter.Object) -> Result<Void, DataStoreError> {
+    func save(_ fileName: String, at directory: AppDirectory, object: Converter.Object) -> Result<Void, FileManagerError> {
         do {
             let data = try dataConverter.encode(object)
             fileManager.createFile(atPath: directory.path + fileName, contents: data)
@@ -32,5 +32,12 @@ struct AppDataStore<Converter: DataConverter> {
         } catch {
             return .failure(.cannotEncode)
         }
+    }
+}
+
+extension AppFileManager {
+
+    init(dataConverter: Converter) {
+        self.init(fileManager: FileManager(), dataConverter: dataConverter)
     }
 }
