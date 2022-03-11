@@ -7,9 +7,14 @@
 
 import Foundation
 
+public protocol RepositoryListOutput {
+    func recieve(_ output: Result<[RepositoryEntity], Error>)
+}
+
 public struct RepositoryList {
 
     private let repository: RepositoryRepository
+    private let mediator: RepositoryListOutput
 
     public func remoteRepositories(relatedTo keyword: String) {
         repository.fetchRemoteRepository(relatedTo: keyword) { result in
@@ -24,13 +29,14 @@ public struct RepositoryList {
                             return RepositoryEntity(data: remoteRepositoryData, isLiked: false)
                         }
                     }
-                    // TODO: publish event
+
+                    mediator.recieve(.success(repositoryEntities))
                 case .failure(let error):
-                    // TODO: publish event
+                    mediator.recieve(.failure(error))
                     break
                 }
             case .failure(let error):
-                // TODO: publish event
+                mediator.recieve(.failure(error))
                 break
             }
         }
@@ -40,9 +46,9 @@ public struct RepositoryList {
         switch repository.fetchLocalRepository() {
         case .success(let repositoriesData):
             let repositoryEntities = repositoriesData.map { RepositoryEntity(data: $0, isLiked: true)}
-            // TODO: publish event
+            mediator.recieve(.success(repositoryEntities))
         case .failure(let error):
-            // TODO: publish event
+            mediator.recieve(.failure(error))
             break
         }
     }
