@@ -137,7 +137,7 @@ private extension RepositoryCell {
 
         NSLayoutConstraint.activate([
             separator.heightAnchor.constraint(equalToConstant: 0.8),
-            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80),
             separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
