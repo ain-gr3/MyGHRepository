@@ -63,6 +63,10 @@ private extension RepositoryCell {
 
     func setupViews() {
 
+        // MARK: - ImageView
+        repositoryImageView.layer.cornerRadius = 8
+        repositoryImageView.clipsToBounds = true
+
         // MARK: - Text
         titleLabel.text = "title"
         subTitleLabel.text = "subtitle"
@@ -118,8 +122,8 @@ private extension RepositoryCell {
             chevronImageView.heightAnchor.constraint(equalToConstant: 24),
             starImageView.widthAnchor.constraint(equalToConstant: 20),
             starImageView.heightAnchor.constraint(equalToConstant: 20),
-            repositoryImageView.widthAnchor.constraint(equalToConstant: 40),
-            repositoryImageView.heightAnchor.constraint(equalToConstant: 40),
+            repositoryImageView.widthAnchor.constraint(equalToConstant: 48),
+            repositoryImageView.heightAnchor.constraint(equalToConstant: 48),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
