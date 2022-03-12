@@ -43,8 +43,17 @@ final class SearchViewController: UIViewController {
 
         let button = UIButton(configuration: buttonConfigration, primaryAction: .init { [weak self] _ in
             textField.resignFirstResponder()
-            self?.navigationController?.pushViewController(RepositoryListViewController(), animated: true)
-            print(self?.viewModel.text.value ?? "nil")
+            guard let self = self else {
+                return
+            }
+            self.navigationController?.pushViewController(RepositoryListViewController(
+                viewModel: SearchRepositoryListViewModel(
+                    keyword: self.viewModel.text.value ?? "nil",
+                    repositoryList: self.viewModel.repositoryList,
+                    output: self.viewModel.output
+                )
+            ), animated: true)
+            print(self.viewModel.text.value ?? "nil")
         })
         viewModel.isButtonEnabled.bind(to: button.rx.isEnabled)
             .disposed(by: disposeBag)

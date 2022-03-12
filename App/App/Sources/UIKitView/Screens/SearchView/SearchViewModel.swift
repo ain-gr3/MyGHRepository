@@ -7,10 +7,19 @@
 
 import RxSwift
 import RxRelay
+import Domain
 
 final class SearchViewModel {
 
     let text = BehaviorRelay<String?>(value: nil)
+
+    let repositoryList: RepositoryList
+    let output: RepositoryListOutputImplement
+
+    init(repositoryList: RepositoryList, output: RepositoryListOutputImplement) {
+        self.output = output
+        self.repositoryList = repositoryList
+    }
 
     var isButtonEnabled: Observable<Bool> {
         text
