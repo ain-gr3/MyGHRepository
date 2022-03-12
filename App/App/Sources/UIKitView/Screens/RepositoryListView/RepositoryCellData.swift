@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Domain
 
 struct RepositoryCellData {
 
@@ -17,6 +18,16 @@ struct RepositoryCellData {
 }
 
 extension RepositoryCellData {
+
+    init(entity: RepositoryEntity) {
+        self.init(
+            title: entity.name,
+            subtitle: entity.language,
+            imageURL: entity.avatarURL,
+            starCount: entity.starCount,
+            isLastContent: entity.isLiked
+        )
+    }
 
     static var sample: Self {
         self.init(
