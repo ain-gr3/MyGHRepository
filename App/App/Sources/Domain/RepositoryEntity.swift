@@ -14,6 +14,7 @@ public class RepositoryEntity: Identifiable {
     public let language: String
     public let starCount: Int
     public let url: URL
+    public let avatarURL: URL
 
     public var isLiked: Bool {
         didSet {
@@ -24,10 +25,11 @@ public class RepositoryEntity: Identifiable {
     public init(data: RepositoryData, isLiked: Bool) {
         self.id = data.id
         self.name = data.fullName
-        self.language = data.language
+        self.language = data.language ?? "no setting"
         self.starCount = data.stargazersCount
         self.url = data.url
         self.isLiked = isLiked
+        self.avatarURL = data.owner.avatarUrl
     }
 
     internal var data: RepositoryData {
@@ -36,7 +38,8 @@ public class RepositoryEntity: Identifiable {
             fullName: name,
             url: url,
             stargazersCount: starCount,
-            language: language
+            language: language,
+            owner: .init(avatarUrl: avatarURL)
         )
     }
 }
