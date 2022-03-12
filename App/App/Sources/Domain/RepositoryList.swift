@@ -68,3 +68,10 @@ public struct RepositoryList {
         }
     }
 }
+
+extension RepositoryList {
+
+    public init(_repository: RepositoryRepository, _output: RepositoryListOutput) {
+        self.init(repository: _repository, output: _output)
+    }
+}
