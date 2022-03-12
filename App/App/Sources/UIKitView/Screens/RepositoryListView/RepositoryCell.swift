@@ -51,9 +51,11 @@ final class RepositoryCell: UICollectionViewCell {
         subTitleLabel.text = repository.subtitle
         starCountLabel.text = numberFormatter.string(from: NSNumber(value: repository.starCount)) ?? "?"
 
-        disposable = repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
-
         separator.isHidden = repository.isLastContent
+
+        DispatchQueue.global(qos: .default).async { [weak self] in
+            self?.disposable = self?.repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
+        }
     }
 }
 
@@ -144,9 +146,13 @@ private extension UIImageView {
         Single.create { obsever in
             do {
                 let data = try Data(contentsOf: url)
-                self.image = UIImage(data: data) ?? .defaultRepositoryImage
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: data) ?? .defaultRepositoryImage
+                }
             } catch {
-                self.image = .defaultRepositoryImage
+                DispatchQueue.main.async {
+                    self.image = .defaultRepositoryImage
+                }
             }
             obsever(.success(()))
             return Disposables.create {}
