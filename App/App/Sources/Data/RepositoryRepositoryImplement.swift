@@ -7,12 +7,14 @@
 
 import Domain
 
-struct RepositoryRepositoryImplement: RepositoryRepository {
+public struct RepositoryRepositoryImplement: RepositoryRepository {
 
     let apiClient = AppAPIClient()
     let dataStore = FavoriteRepositoryDataStore()
 
-    func fetchRemoteRepository(relatedTo keyword: String, completion: @escaping (Result<[RepositoryData], Error>) -> Void) {
+    public init() {}
+
+    public func fetchRemoteRepository(relatedTo keyword: String, completion: @escaping (Result<[RepositoryData], Error>) -> Void) {
         apiClient.send(.searchRepositoriesRequest(searchWord: keyword)) { reslut in
             switch reslut {
             case .success(let response):
@@ -23,7 +25,7 @@ struct RepositoryRepositoryImplement: RepositoryRepository {
         }
     }
 
-    func fetchLocalRepository() -> Result<[RepositoryData], Error> {
+    public func fetchLocalRepository() -> Result<[RepositoryData], Error> {
         switch dataStore.fetchRepositories() {
         case .success(let repositories):
             return .success(repositories)
@@ -32,7 +34,7 @@ struct RepositoryRepositoryImplement: RepositoryRepository {
         }
     }
 
-    func save(_ repository: RepositoryData) -> Result<Void, Error> {
+    public func save(_ repository: RepositoryData) -> Result<Void, Error> {
         switch dataStore.add(repository) {
         case .success:
             return .success(())
@@ -41,7 +43,7 @@ struct RepositoryRepositoryImplement: RepositoryRepository {
         }
     }
 
-    func remove(_ repository: RepositoryData) -> Result<Void, Error> {
+    public func remove(_ repository: RepositoryData) -> Result<Void, Error> {
         switch dataStore.remove(repository) {
         case .success:
             return .success(())
