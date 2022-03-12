@@ -37,14 +37,24 @@ public final class MainTabBarController: UITabBarController {
     }
 }
 
-private extension MainTab {
+private extension MainTabBarController {
 
-    func viewController() -> UIViewController {
-        switch self {
+    func viewController(of tab: MainTab) -> UIViewController {
+        switch tab {
         case .search:
-            return SearchViewController(viewModel: SearchViewModel())
+            return SearchViewController(
+                viewModel: SearchViewModel(
+                    repositoryList: viewModel.repositoryList,
+                    output: viewModel.output
+                )
+            )
         case .favorite:
-            return RepositoryListViewController()
+            return RepositoryListViewController(
+                viewModel: FavoriteRepositoryListViewModel(
+                    repositoryList: viewModel.repositoryList,
+                    output: viewModel.output
+                )
+            )
         }
     }
 }
