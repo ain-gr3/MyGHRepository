@@ -26,15 +26,14 @@ final class RepositoryListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
-
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.minimumLineSpacing = 0
+        layout.minimumLineSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 32, left: 0, bottom: 32, right: 0)
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .systemGroupedBackground
         collectionView.register(RepositoryCell.self, forCellWithReuseIdentifier: String(describing: RepositoryCell.self))
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -85,6 +84,6 @@ final class RepositoryListViewController: UIViewController {
 extension RepositoryListViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 0)
+        return CGSize(width: collectionView.frame.width - 16, height: 100)
     }
 }

@@ -14,7 +14,6 @@ final class RepositoryCell: UICollectionViewCell {
     private let titleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let starCountLabel = UILabel()
-    private let separator = UIView()
 
     private lazy var numberFormatter = NumberFormatter.comma
 
@@ -50,8 +49,6 @@ final class RepositoryCell: UICollectionViewCell {
         titleLabel.text = repository.title
         subTitleLabel.text = repository.subtitle
         starCountLabel.text = numberFormatter.string(from: NSNumber(value: repository.starCount)) ?? "?"
-
-        separator.isHidden = repository.isLastContent
 
         DispatchQueue.global(qos: .default).async { [weak self] in
             self?.disposable = self?.repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
@@ -118,29 +115,21 @@ private extension RepositoryCell {
         contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            chevronImageView.widthAnchor.constraint(equalToConstant: 24),
-            chevronImageView.heightAnchor.constraint(equalToConstant: 24),
+            chevronImageView.widthAnchor.constraint(equalToConstant: 20),
+            chevronImageView.heightAnchor.constraint(equalToConstant: 20),
             starImageView.widthAnchor.constraint(equalToConstant: 20),
             starImageView.heightAnchor.constraint(equalToConstant: 20),
             repositoryImageView.widthAnchor.constraint(equalToConstant: 48),
             repositoryImageView.heightAnchor.constraint(equalToConstant: 48),
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
 
-        // MARK: - Separator
-        separator.backgroundColor = .separator
-        separator.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(separator)
-
-        NSLayoutConstraint.activate([
-            separator.heightAnchor.constraint(equalToConstant: 0.8),
-            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80),
-            separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        contentView.backgroundColor = .systemBackground
+        contentView.layer.cornerRadius = 8
+        contentView.clipsToBounds = true
     }
 }
 
