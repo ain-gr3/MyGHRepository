@@ -127,9 +127,13 @@ private extension RepositoryCell {
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
 
-        contentView.backgroundColor = .systemBackground
-        contentView.layer.cornerRadius = 8
-        contentView.clipsToBounds = true
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 8
+        clipsToBounds = true
+
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .secondarySystemBackground
+        self.selectedBackgroundView = selectedBackgroundView
     }
 }
 
