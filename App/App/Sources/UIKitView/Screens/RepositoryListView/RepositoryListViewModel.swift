@@ -10,20 +10,6 @@ import Domain
 import RxSwift
 import RxRelay
 
-enum ListViewType {
-    case search(keyword: String)
-    case favorite
-
-    var title: String {
-        switch self {
-        case .search(let keyword):
-            return keyword.isEmpty ? "" : "'\(keyword)'"
-        case .favorite:
-            return "お気に入り"
-        }
-    }
-}
-
 protocol RepositoryListViewModel {
 
     var type: ListViewType { get }
