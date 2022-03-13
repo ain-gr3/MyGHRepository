@@ -63,7 +63,7 @@ final class RepositoryListViewController: UIViewController {
                     return
                 }
                 let detailViewController = RepositoryDetailViewController(
-                    viewModel: .init(repositoryList: self.viewModel.repositoryList, repository: repository)
+                    viewModel: .init(repositoryList: self.viewModel.repositoryList, output: self.viewModel.output, repository: repository)
                 )
                 self.navigationController?.pushViewController(detailViewController, animated: true)
             }
