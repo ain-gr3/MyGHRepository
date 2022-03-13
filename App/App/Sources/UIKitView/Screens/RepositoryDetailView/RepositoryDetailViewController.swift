@@ -36,9 +36,12 @@ final class RepositoryDetailViewController: UIViewController, WKUIDelegate {
 
         view.backgroundColor = .systemBackground
 
-        let button = UIButton(frame: .init(origin: .zero, size: .init(width: 54, height: 54)), primaryAction: .init { [weak self] _ in
+        let button = UIButton(frame: .init(origin: .zero, size: .init(width: 28, height: 28)), primaryAction: .init { [weak self] _ in
             self?.viewModel.toggleIsLiked()
         })
+        button.imageView?.contentMode = .scaleAspectFit
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
         button.isSelected = viewModel.repository.isLiked
