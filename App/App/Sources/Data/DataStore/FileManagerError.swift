@@ -12,4 +12,5 @@ enum FileManagerError: Error {
     case noSuchFile
     case cannotEncode
     case invalidDataStructure
+    case cannotCreateFile
 }

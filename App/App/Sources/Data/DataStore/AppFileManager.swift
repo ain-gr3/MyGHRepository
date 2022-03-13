@@ -27,8 +27,10 @@ struct AppFileManager<Converter: DataConverter> {
     func save(_ fileName: String, at directory: AppDirectory, object: Converter.Object) -> Result<Void, FileManagerError> {
         do {
             let data = try dataConverter.encode(object)
-            fileManager.createFile(atPath: directory.path + fileName, contents: data)
-            return .success(())
+            if fileManager.createFile(atPath: directory.path + fileName, contents: data) {
+                return .success(())
+            }
+            return .failure(.cannotCreateFile)
         } catch {
             return .failure(.cannotEncode)
         }
@@ -38,6 +40,6 @@ struct AppFileManager<Converter: DataConverter> {
 extension AppFileManager {
 
     init(dataConverter: Converter) {
-        self.init(fileManager: FileManager(), dataConverter: dataConverter)
+        self.init(fileManager: FileManager.default, dataConverter: dataConverter)
     }
 }

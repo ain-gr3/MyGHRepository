@@ -22,9 +22,9 @@ enum AppDirectory {
         case .root:
             return rootPath
         case .library(let libraryDirectory):
-            return rootPath + "/Library" + libraryDirectory.path
+            return rootPath + "/Library" + libraryDirectory.path + "/"
         case .documents:
-            return rootPath + "/Documents"
+            return rootPath + "/Documents/"
         }
     }
 }
