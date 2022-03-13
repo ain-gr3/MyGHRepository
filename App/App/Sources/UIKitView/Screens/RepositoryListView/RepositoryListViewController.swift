@@ -26,6 +26,7 @@ final class RepositoryListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // MARK: - Collection View
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
@@ -46,13 +47,59 @@ final class RepositoryListViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+        // MARK: - Error Label
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
+        // MARK: - Indicator
+        let indicator = UIActivityIndicatorView(style: .large)
+
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(indicator)
+
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
         title = viewModel.type.title
 
-        viewModel.repositories.bind(to: collectionView.rx.items(cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, entity, cell in
-            cell.bind(RepositoryCellData(entity: entity))
-        }
-        .disposed(by: disposeBag)
+        viewModel.state
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(onNext: { state in
+            indicator.isHidden = true
+            indicator.stopAnimating()
 
+            label.isHidden = true
+
+            switch state {
+            case .normal:
+                break
+            case .isLoading:
+                indicator.isHidden = false
+                indicator.startAnimating()
+            case .hasError(let error):
+                label.isHidden = false
+                label.text = error.description
+            }
+        })
+            .disposed(by: disposeBag)
+
+        viewModel.repositories
+            .bind(to: collectionView.rx.items(
+                cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, entity, cell in
+                cell.bind(RepositoryCellData(entity: entity))
+            }
+            .disposed(by: disposeBag)
+        
         collectionView.rx.itemSelected
             .withLatestFrom(viewModel.repositories) { indexPath, repositories in
                 return repositories[indexPath.row]
