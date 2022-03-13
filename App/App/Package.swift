@@ -28,7 +28,7 @@ let package = Package(
             dependencies: ["Domain"]),
         .target(
             name: "UIKitView",
-            dependencies: [.byName(name: "RxSwift"), .product(name: "RxCocoa", package: "RxSwift")]
+            dependencies: ["Domain", .byName(name: "RxSwift"), .product(name: "RxCocoa", package: "RxSwift")]
         ),
         .testTarget(
             name: "DomainTests",

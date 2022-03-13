@@ -8,13 +8,14 @@
 import Foundation
 
 public protocol RepositoryListOutput {
-    func recieve(_ output: Result<[RepositoryEntity], Error>)
+    func recieveFromRemote(_ output: Result<[RepositoryEntity], Error>)
+    func recieveFromLocal(_ output: Result<[RepositoryEntity], Error>)
 }
 
 public struct RepositoryList {
 
-    private let repository: RepositoryRepository
-    private let mediator: RepositoryListOutput
+    public let repository: RepositoryRepository
+    public let output: RepositoryListOutput
 
     public func remoteRepositories(relatedTo keyword: String) {
         repository.fetchRemoteRepository(relatedTo: keyword) { result in
@@ -30,13 +31,13 @@ public struct RepositoryList {
                         }
                     }
 
-                    mediator.recieve(.success(repositoryEntities))
+                    output.recieveFromRemote(.success(repositoryEntities))
                 case .failure(let error):
-                    mediator.recieve(.failure(error))
+                    output.recieveFromRemote(.failure(error))
                     break
                 }
             case .failure(let error):
-                mediator.recieve(.failure(error))
+                output.recieveFromRemote(.failure(error))
                 break
             }
         }
@@ -46,9 +47,9 @@ public struct RepositoryList {
         switch repository.fetchLocalRepository() {
         case .success(let repositoriesData):
             let repositoryEntities = repositoriesData.map { RepositoryEntity(data: $0, isLiked: true)}
-            mediator.recieve(.success(repositoryEntities))
+            output.recieveFromLocal(.success(repositoryEntities))
         case .failure(let error):
-            mediator.recieve(.failure(error))
+            output.recieveFromLocal(.failure(error))
             break
         }
     }
@@ -65,5 +66,12 @@ public struct RepositoryList {
         case .failure:
             repositoryEntity.isLiked = pastIsLiked
         }
+    }
+}
+
+extension RepositoryList {
+
+    public init(_repository: RepositoryRepository, _output: RepositoryListOutput) {
+        self.init(repository: _repository, output: _output)
     }
 }

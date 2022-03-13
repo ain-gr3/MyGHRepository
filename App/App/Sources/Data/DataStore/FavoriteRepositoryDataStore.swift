@@ -18,6 +18,14 @@ final class FavoriteRepositoryDataStore {
         case .success(let repositories):
             self.repositories = repositories
             return .success(repositories)
+        case .failure(let error) where error == .noSuchFile:
+            let result = fileManager.save(fileName, at: .documents, object: [])
+            switch result {
+            case .success(()):
+                return .success([])
+            case .failure(let error):
+                return .failure(.fileManagerError(error))
+            }
         case .failure(let error):
             return .failure(.fileManagerError(error))
         }

@@ -6,9 +6,23 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class RepositoryListViewController: UIViewController {
 
+    private let viewModel: RepositoryListViewModel
+    private let disposeBag = DisposeBag()
+
+    init(viewModel: RepositoryListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,8 +36,6 @@ final class RepositoryListViewController: UIViewController {
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(RepositoryCell.self, forCellWithReuseIdentifier: String(describing: RepositoryCell.self))
-        collectionView.dataSource = self
-        collectionView.delegate = self
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
@@ -34,25 +46,21 @@ final class RepositoryListViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-}
 
-extension RepositoryListViewController: UICollectionViewDataSource {
+        viewModel.repositories.bind(to: collectionView.rx.items(cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, item, cell in
+            cell.bind(item)
+        }
+        .disposed(by: disposeBag)
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
+        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: RepositoryCell.self), for: indexPath) as! RepositoryCell
-        cell.bind(.sample)
-        return cell
+        viewModel.reloadRepositories()
     }
 }
 
 extension RepositoryListViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 100)
+        return CGSize(width: collectionView.frame.width, height: 0)
     }
 }

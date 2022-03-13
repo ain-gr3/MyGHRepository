@@ -7,6 +7,8 @@
 
 import UIKit
 import UIKitView
+import Domain
+import Data
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,7 +21,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = MainTabBarController()
+
+        let repositoryListOutput = RepositoryListOutputImplement()
+        let mainTabBarController = MainTabBarController(
+            viewModel: MainTabBarViewModel(
+                repositoryList: RepositoryList(_repository: RepositoryRepositoryImplement(), _output: repositoryListOutput),
+                output: repositoryListOutput
+            )
+        )
+        window.rootViewController = mainTabBarController
         self.window = window
         window.makeKeyAndVisible()
     }

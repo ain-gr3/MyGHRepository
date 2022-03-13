@@ -13,5 +13,11 @@ public struct RepositoryData: Codable, Equatable {
     public let fullName: String
     public let url: URL
     public let stargazersCount: Int
-    public let language: String
+    public let language: String?
+    public let owner: Owner
+}
+
+public struct Owner: Codable, Equatable {
+
+    public let avatarUrl: URL
 }
