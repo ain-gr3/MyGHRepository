@@ -22,31 +22,32 @@ public final class MainTabBarViewModel {
 
 public struct RepositoryListOutputImplement: RepositoryListOutput {
 
-    let remotePublisher = PublishSubject<[RepositoryEntity]>()
-    let localPublisher = PublishSubject<[RepositoryEntity]>()
-    let updatedRepositoryPublisher = PublishSubject<RepositoryEntity>()
+    let remotePublisher = PublishRelay<[RepositoryEntity]>()
+    let localPublisher = PublishRelay<[RepositoryEntity]>()
+    let updatedRepositoryPublisher = PublishRelay<RepositoryEntity>()
+    let errorPublisher = PublishRelay<Error>()
 
     public init() {}
 
     public func recieveFromRemote(_ output: Result<[RepositoryEntity], Error>) {
         switch output {
         case .success(let entities):
-            remotePublisher.onNext(entities)
+            remotePublisher.accept(entities)
         case .failure(let error):
-            remotePublisher.onError(error)
+            errorPublisher.accept(error)
         }
     }
 
     public func recieveFromLocal(_ output: Result<[RepositoryEntity], Error>) {
         switch output {
         case .success(let entities):
-            localPublisher.onNext(entities)
+            localPublisher.accept(entities)
         case .failure(let error):
-            localPublisher.onError(error)
+            errorPublisher.accept(error)
         }
     }
 
     public func recieveUpdatedRepository(_ output: RepositoryEntity) {
-        updatedRepositoryPublisher.onNext(output)
+        updatedRepositoryPublisher.accept(output)
     }
 }
