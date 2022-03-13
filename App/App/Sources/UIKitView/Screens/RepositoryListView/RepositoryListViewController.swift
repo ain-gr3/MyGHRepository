@@ -47,12 +47,36 @@ final class RepositoryListViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
-        viewModel.repositories.bind(to: collectionView.rx.items(cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, item, cell in
-            cell.bind(item)
+        title = viewModel.type.title
+
+        viewModel.repositories.bind(to: collectionView.rx.items(cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, entity, cell in
+            cell.bind(RepositoryCellData(entity: entity))
         }
         .disposed(by: disposeBag)
 
-        collectionView.rx.setDelegate(self).disposed(by: disposeBag)
+        collectionView.rx.itemSelected
+            .withLatestFrom(viewModel.repositories) { indexPath, repositories in
+                return repositories[indexPath.row]
+            }
+            .subscribe { [weak self] repositoryEvent in
+                guard let self = self, let repository = repositoryEvent.element else {
+                    return
+                }
+                let detailViewController = RepositoryDetailViewController(
+                    viewModel: .init(repositoryList: self.viewModel.repositoryList, repository: repository)
+                )
+                self.navigationController?.pushViewController(detailViewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        collectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+
+        viewModel.reloadRepositories()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
         viewModel.reloadRepositories()
     }
