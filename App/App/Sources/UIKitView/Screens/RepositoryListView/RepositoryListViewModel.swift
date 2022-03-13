@@ -27,6 +27,7 @@ protocol RepositoryListViewModel {
 
     var type: ListViewType { get }
     var repositoryList: RepositoryList { get }
+    var output: RepositoryListOutputImplement { get }
     var repositories: Observable<[RepositoryEntity]> { get }
     func reloadRepositories()
 }
@@ -34,7 +35,7 @@ protocol RepositoryListViewModel {
 final class SearchRepositoryListViewModel: RepositoryListViewModel {
 
     private let keyword: String
-    private let output: RepositoryListOutputImplement
+    let output: RepositoryListOutputImplement
     let repositoryList: RepositoryList
     let type: ListViewType
 
@@ -56,7 +57,7 @@ final class SearchRepositoryListViewModel: RepositoryListViewModel {
 
 final class FavoriteRepositoryListViewModel: RepositoryListViewModel {
 
-    private let output: RepositoryListOutputImplement
+    let output: RepositoryListOutputImplement
     let repositoryList: RepositoryList
     let type: ListViewType
 

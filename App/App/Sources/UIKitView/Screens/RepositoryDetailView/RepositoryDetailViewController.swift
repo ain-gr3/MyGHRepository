@@ -41,6 +41,7 @@ final class RepositoryDetailViewController: UIViewController, WKUIDelegate {
         })
         button.setImage(UIImage(systemName: "heart"), for: .normal)
         button.setImage(UIImage(systemName: "heart.fill"), for: .selected)
+        button.isSelected = viewModel.repository.isLiked
         viewModel.isLiked.bind(to: button.rx.isSelected)
             .disposed(by: disposeBag)
 

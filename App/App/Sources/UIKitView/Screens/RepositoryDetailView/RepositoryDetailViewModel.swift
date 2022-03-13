@@ -12,21 +12,21 @@ import RxSwift
 final class RepositoryDetailViewModel {
 
     private let repositoryList: RepositoryList
+    private let output: RepositoryListOutputImplement
     let repository: RepositoryEntity
 
-    private let _isLiked = BehaviorSubject<Bool>(value: false)
     var isLiked: Observable<Bool> {
-        _isLiked.asObservable()
+        output.updatedRepositoryPublisher
+            .filter { [weak self] updated in
+                updated == self?.repository
+            }
+            .map { $0.isLiked }
     }
 
-    init(repositoryList: RepositoryList, repository: RepositoryEntity) {
+    init(repositoryList: RepositoryList, output: RepositoryListOutputImplement, repository: RepositoryEntity) {
         self.repositoryList = repositoryList
         self.repository = repository
-
-        self._isLiked.onNext(repository.isLiked)
-        self.repository.output = { [weak self] isLiked in
-            self?._isLiked.onNext(isLiked)
-        }
+        self.output = output
     }
 
     func toggleIsLiked() {
