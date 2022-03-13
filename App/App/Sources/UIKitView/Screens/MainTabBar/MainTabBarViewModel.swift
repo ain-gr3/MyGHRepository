@@ -7,7 +7,7 @@
 
 import Foundation
 import Domain
-import RxSwift
+import RxRelay
 
 public final class MainTabBarViewModel {
 
