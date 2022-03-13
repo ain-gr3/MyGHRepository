@@ -4,6 +4,8 @@
 GitHub のリポジトリをキーワードで検索・閲覧するアプリ。
 アプリ内でお気にりのリポジトリのリストを作成できる。
 
+![Simulator Screen Recording - iPhone 13 Pro - 2022-03-13 at 19 06 04](https://user-images.githubusercontent.com/62441125/158054570-472e5fca-2f4b-4183-a96a-374f132417e2.gif)
+
 ## 設計
 SPM を用いたレイヤードアーキテクチャ。
 DDD を頑張る。
