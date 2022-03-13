@@ -16,9 +16,11 @@ public class RepositoryEntity: Identifiable {
     public let url: URL
     public let avatarURL: URL
 
+    public var output: ((Bool) -> Void)?
+
     public var isLiked: Bool {
         didSet {
-            // TODO: publish event
+            output?(isLiked)
         }
     }
 
@@ -27,16 +29,17 @@ public class RepositoryEntity: Identifiable {
         self.name = data.fullName
         self.language = data.language ?? "no setting"
         self.starCount = data.stargazersCount
-        self.url = data.url
+        self.url = data.htmlUrl
         self.isLiked = isLiked
         self.avatarURL = data.owner.avatarUrl
+        self.output = nil
     }
 
     internal var data: RepositoryData {
         RepositoryData(
             id: id,
             fullName: name,
-            url: url,
+            htmlUrl: url,
             stargazersCount: starCount,
             language: language,
             owner: .init(avatarUrl: avatarURL)
