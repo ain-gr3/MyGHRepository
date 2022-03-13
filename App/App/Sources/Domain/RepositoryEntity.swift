@@ -16,13 +16,7 @@ public class RepositoryEntity: Identifiable {
     public let url: URL
     public let avatarURL: URL
 
-    public var output: ((Bool) -> Void)?
-
-    public var isLiked: Bool {
-        didSet {
-            output?(isLiked)
-        }
-    }
+    public var isLiked: Bool
 
     public init(data: RepositoryData, isLiked: Bool) {
         self.id = data.id
@@ -32,7 +26,6 @@ public class RepositoryEntity: Identifiable {
         self.url = data.htmlUrl
         self.isLiked = isLiked
         self.avatarURL = data.owner.avatarUrl
-        self.output = nil
     }
 
     internal var data: RepositoryData {

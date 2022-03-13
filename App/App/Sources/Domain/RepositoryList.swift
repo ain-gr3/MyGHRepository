@@ -10,6 +10,7 @@ import Foundation
 public protocol RepositoryListOutput {
     func recieveFromRemote(_ output: Result<[RepositoryEntity], Error>)
     func recieveFromLocal(_ output: Result<[RepositoryEntity], Error>)
+    func recieveUpdatedRepository(_ output: RepositoryEntity)
 }
 
 public struct RepositoryList {
@@ -57,14 +58,17 @@ public struct RepositoryList {
     public func toggleIsLiked(of repositoryEntity: RepositoryEntity) {
         let pastIsLiked = repositoryEntity.isLiked
         repositoryEntity.isLiked = !pastIsLiked
+        output.recieveUpdatedRepository(repositoryEntity)
 
         let data = repositoryEntity.data
         let result = pastIsLiked ? repository.remove(data) : repository.save(data)
         switch result {
         case .success:
+            output.recieveUpdatedRepository(repositoryEntity)
             break
         case .failure:
             repositoryEntity.isLiked = pastIsLiked
+            output.recieveUpdatedRepository(repositoryEntity)
         }
     }
 }
