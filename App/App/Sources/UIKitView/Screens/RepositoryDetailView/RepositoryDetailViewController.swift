@@ -28,13 +28,14 @@ final class RepositoryDetailViewController: UIViewController, WKUIDelegate {
         let webConfiguration = WKWebViewConfiguration()
         webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.uiDelegate = self
+        webView.backgroundColor = .systemBackground
         view = webView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.isOpaque = false
 
         let button = UIButton(frame: .init(origin: .zero, size: .init(width: 28, height: 28)), primaryAction: .init { [weak self] _ in
             self?.viewModel.toggleIsLiked()
