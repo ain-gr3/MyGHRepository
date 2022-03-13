@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct RepositoryData: Codable, Hashable {
+public struct RepositoryData: Codable, Equatable {
 
     public let id: Int
     public let fullName: String

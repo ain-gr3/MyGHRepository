@@ -7,30 +7,38 @@
 
 import Foundation
 
+public protocol RepositoryListOutput {
+    func recieve(_ output: Result<[RepositoryEntity], Error>)
+}
+
 public struct RepositoryList {
 
     private let repository: RepositoryRepository
+    private let mediator: RepositoryListOutput
 
     public func remoteRepositories(relatedTo keyword: String) {
-        switch repository.fetchRemoteRepository(relatedTo: keyword) {
-        case .success(let remoteRepositoriesData):
-            switch repository.fetchLocalRepository() {
-            case .success(let localRepositoriesData):
-                let repositoryEntities = remoteRepositoriesData.map { remoteRepositoryData -> RepositoryEntity in
-                    if localRepositoriesData.contains(remoteRepositoryData) {
-                        return RepositoryEntity(data: remoteRepositoryData, isLiked: true)
-                    } else {
-                        return RepositoryEntity(data: remoteRepositoryData, isLiked: false)
+        repository.fetchRemoteRepository(relatedTo: keyword) { result in
+            switch result {
+            case .success(let remoteRepositoriesData):
+                switch repository.fetchLocalRepository() {
+                case .success(let localRepositoriesData):
+                    let repositoryEntities = remoteRepositoriesData.map { remoteRepositoryData -> RepositoryEntity in
+                        if localRepositoriesData.contains(remoteRepositoryData) {
+                            return RepositoryEntity(data: remoteRepositoryData, isLiked: true)
+                        } else {
+                            return RepositoryEntity(data: remoteRepositoryData, isLiked: false)
+                        }
                     }
+
+                    mediator.recieve(.success(repositoryEntities))
+                case .failure(let error):
+                    mediator.recieve(.failure(error))
+                    break
                 }
-                // TODO: publish event
             case .failure(let error):
-                // TODO: publish event
+                mediator.recieve(.failure(error))
                 break
             }
-        case .failure(let error):
-            // TODO: publish event
-            break
         }
     }
 
@@ -38,9 +46,9 @@ public struct RepositoryList {
         switch repository.fetchLocalRepository() {
         case .success(let repositoriesData):
             let repositoryEntities = repositoriesData.map { RepositoryEntity(data: $0, isLiked: true)}
-            // TODO: publish event
+            mediator.recieve(.success(repositoryEntities))
         case .failure(let error):
-            // TODO: publish event
+            mediator.recieve(.failure(error))
             break
         }
     }
