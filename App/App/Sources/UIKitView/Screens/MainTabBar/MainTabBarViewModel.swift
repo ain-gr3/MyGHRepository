@@ -24,6 +24,7 @@ public struct RepositoryListOutputImplement: RepositoryListOutput {
 
     let remotePublisher = PublishSubject<[RepositoryEntity]>()
     let localPublisher = PublishSubject<[RepositoryEntity]>()
+    let updatedRepositoryPublisher = PublishSubject<RepositoryEntity>()
 
     public init() {}
 
@@ -43,5 +44,9 @@ public struct RepositoryListOutputImplement: RepositoryListOutput {
         case .failure(let error):
             localPublisher.onError(error)
         }
+    }
+
+    public func recieveUpdatedRepository(_ output: RepositoryEntity) {
+        updatedRepositoryPublisher.onNext(output)
     }
 }
