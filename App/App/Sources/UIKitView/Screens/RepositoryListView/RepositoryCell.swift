@@ -51,15 +51,21 @@ final class RepositoryCell: UICollectionViewCell {
         subTitleLabel.text = repository.subtitle
         starCountLabel.text = numberFormatter.string(from: NSNumber(value: repository.starCount)) ?? "?"
 
-        disposable = repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
-
         separator.isHidden = repository.isLastContent
+
+        DispatchQueue.global(qos: .default).async { [weak self] in
+            self?.disposable = self?.repositoryImageView.downlodeImage(from: repository.imageURL).subscribe()
+        }
     }
 }
 
 private extension RepositoryCell {
 
     func setupViews() {
+
+        // MARK: - ImageView
+        repositoryImageView.layer.cornerRadius = 8
+        repositoryImageView.clipsToBounds = true
 
         // MARK: - Text
         titleLabel.text = "title"
@@ -116,8 +122,8 @@ private extension RepositoryCell {
             chevronImageView.heightAnchor.constraint(equalToConstant: 24),
             starImageView.widthAnchor.constraint(equalToConstant: 20),
             starImageView.heightAnchor.constraint(equalToConstant: 20),
-            repositoryImageView.widthAnchor.constraint(equalToConstant: 40),
-            repositoryImageView.heightAnchor.constraint(equalToConstant: 40),
+            repositoryImageView.widthAnchor.constraint(equalToConstant: 48),
+            repositoryImageView.heightAnchor.constraint(equalToConstant: 48),
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
@@ -131,7 +137,7 @@ private extension RepositoryCell {
 
         NSLayoutConstraint.activate([
             separator.heightAnchor.constraint(equalToConstant: 0.8),
-            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            separator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80),
             separator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             separator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
@@ -144,9 +150,13 @@ private extension UIImageView {
         Single.create { obsever in
             do {
                 let data = try Data(contentsOf: url)
-                self.image = UIImage(data: data) ?? .defaultRepositoryImage
+                DispatchQueue.main.async {
+                    self.image = UIImage(data: data) ?? .defaultRepositoryImage
+                }
             } catch {
-                self.image = .defaultRepositoryImage
+                DispatchQueue.main.async {
+                    self.image = .defaultRepositoryImage
+                }
             }
             obsever(.success(()))
             return Disposables.create {}
