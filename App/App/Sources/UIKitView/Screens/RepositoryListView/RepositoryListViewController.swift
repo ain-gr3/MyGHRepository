@@ -14,6 +14,22 @@ final class RepositoryListViewController: UIViewController {
     private let viewModel: RepositoryListViewModel
     private let disposeBag = DisposeBag()
 
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 8
+        layout.sectionInset = UIEdgeInsets(top: 32, left: 0, bottom: 32, right: 0)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .systemGroupedBackground
+        collectionView.register(RepositoryCell.self, forCellWithReuseIdentifier: String(describing: RepositoryCell.self))
+        return collectionView
+    }()
+
+    private let label = UILabel()
+    private let indicator = UIActivityIndicatorView(style: .large)
+
     init(viewModel: RepositoryListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -27,15 +43,6 @@ final class RepositoryListViewController: UIViewController {
         super.viewDidLoad()
 
         // MARK: - Collection View
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.minimumLineSpacing = 8
-        layout.sectionInset = UIEdgeInsets(top: 32, left: 0, bottom: 32, right: 0)
-
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemGroupedBackground
-        collectionView.register(RepositoryCell.self, forCellWithReuseIdentifier: String(describing: RepositoryCell.self))
 
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
@@ -48,9 +55,7 @@ final class RepositoryListViewController: UIViewController {
         ])
 
         // MARK: - Error Label
-        let label = UILabel()
         label.textColor = .secondaryLabel
-
         label.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(label)
 
@@ -60,8 +65,6 @@ final class RepositoryListViewController: UIViewController {
         ])
 
         // MARK: - Indicator
-        let indicator = UIActivityIndicatorView(style: .large)
-
         indicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(indicator)
 
@@ -70,36 +73,50 @@ final class RepositoryListViewController: UIViewController {
             indicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
 
+        bind()
+
+        viewModel.reloadRepositories()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        viewModel.reloadRepositories()
+    }
+}
+
+private extension RepositoryListViewController {
+
+    func bind() {
         title = viewModel.type.title
 
         viewModel.state
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { state in
-            indicator.isHidden = true
-            indicator.stopAnimating()
+            .subscribe(onNext: { [weak self] state in
+                self?.label.isHidden = true
+                self?.indicator.isHidden = true
+                self?.indicator.stopAnimating()
 
-            label.isHidden = true
-
-            switch state {
-            case .normal:
-                break
-            case .isLoading:
-                indicator.isHidden = false
-                indicator.startAnimating()
-            case .hasError(let error):
-                label.isHidden = false
-                label.text = error.description
-            }
-        })
+                switch state {
+                case .normal:
+                    break
+                case .isLoading:
+                    self?.indicator.isHidden = false
+                    self?.indicator.startAnimating()
+                case .hasError(let error):
+                    self?.label.isHidden = false
+                    self?.label.text = error.description
+                }
+            })
             .disposed(by: disposeBag)
 
         viewModel.repositories
             .bind(to: collectionView.rx.items(
                 cellIdentifier: String(describing: RepositoryCell.self), cellType: RepositoryCell.self)) { _, entity, cell in
-                cell.bind(RepositoryCellData(entity: entity))
-            }
-            .disposed(by: disposeBag)
-        
+                    cell.bind(RepositoryCellData(entity: entity))
+                }
+                .disposed(by: disposeBag)
+
         collectionView.rx.itemSelected
             .withLatestFrom(viewModel.repositories) { indexPath, repositories in
                 return repositories[indexPath.row]
@@ -117,14 +134,6 @@ final class RepositoryListViewController: UIViewController {
 
         collectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-
-        viewModel.reloadRepositories()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        viewModel.reloadRepositories()
     }
 }
 
