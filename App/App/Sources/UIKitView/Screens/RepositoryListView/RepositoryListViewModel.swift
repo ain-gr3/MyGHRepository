@@ -10,37 +10,43 @@ import Domain
 import RxSwift
 
 enum ListViewType {
-    case search
+    case search(keyword: String)
     case favorite
+
+    var title: String {
+        switch self {
+        case .search(let keyword):
+            return keyword.isEmpty ? "" : "'\(keyword)'"
+        case .favorite:
+            return "お気に入り"
+        }
+    }
 }
 
 protocol RepositoryListViewModel {
 
-    var repositories: Observable<[RepositoryCellData]> { get }
+    var type: ListViewType { get }
+    var repositoryList: RepositoryList { get }
+    var repositories: Observable<[RepositoryEntity]> { get }
     func reloadRepositories()
-
 }
 
 final class SearchRepositoryListViewModel: RepositoryListViewModel {
 
-    private let type: ListViewType = .search
     private let keyword: String
-    private let repositoryList: RepositoryList
     private let output: RepositoryListOutputImplement
+    let repositoryList: RepositoryList
+    let type: ListViewType
 
-    var repositories: Observable<[RepositoryCellData]> {
+    var repositories: Observable<[RepositoryEntity]> {
         output.remotePublisher
-            .map { entities -> [RepositoryCellData] in
-                entities.map {
-                    RepositoryCellData(entity: $0)
-                }
-            }
     }
 
     init(keyword: String, repositoryList: RepositoryList, output: RepositoryListOutputImplement) {
         self.repositoryList = repositoryList
         self.output = output
         self.keyword = keyword
+        self.type = .search(keyword: keyword)
     }
 
     func reloadRepositories() {
@@ -50,25 +56,23 @@ final class SearchRepositoryListViewModel: RepositoryListViewModel {
 
 final class FavoriteRepositoryListViewModel: RepositoryListViewModel {
 
-    private let repositoryList: RepositoryList
     private let output: RepositoryListOutputImplement
+    let repositoryList: RepositoryList
+    let type: ListViewType
 
-    var repositories: Observable<[RepositoryCellData]> {
+    private(set) var entities: [RepositoryEntity] = []
+
+    var repositories: Observable<[RepositoryEntity]> {
         output.localPublisher
-            .map { entities -> [RepositoryCellData] in
-                entities.map {
-                    RepositoryCellData(entity: $0)
-                }
-            }
     }
 
     init(repositoryList: RepositoryList, output: RepositoryListOutputImplement) {
         self.repositoryList = repositoryList
         self.output = output
+        self.type = .favorite
     }
 
     func reloadRepositories() {
-        // TODO: handle error
-        repositoryList.repository.fetchLocalRepository()
+        repositoryList.localRepositories()
     }
 }
